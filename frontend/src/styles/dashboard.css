@@ -1,0 +1,54 @@
+body {
+  background-color: #F8F9FC;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #ffffff;
+  height: 100vh;
+  position: fixed;
+  padding: 20px;
+}
+
+.sidebar .nav-link {
+  border-radius: 30px;
+  padding: 10px 15px;
+  color: #555;
+  transition: 0.3s;
+}
+
+.sidebar .nav-link:hover {
+  background: #EDE7F6;
+}
+
+.sidebar .active {
+  background: #4B2E83;
+  color: white !important;
+}
+
+/* Cards */
+.card-modern {
+  border-radius: 16px;
+  border: none;
+  transition: 0.3s;
+}
+
+.card-modern:hover {
+  transform: translateY(-5px);
+}
+
+/* Banner */
+.banner {
+  background: #EDE7F6;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+/* Table */
+.table-modern {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+}

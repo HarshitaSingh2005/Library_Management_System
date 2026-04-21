@@ -6,7 +6,13 @@ const BookCard = ({ book, onClick }) => {
       <div
         className="card h-100 shadow-sm"
         onClick={onClick}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: "pointer", transition: "0.3s" }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.transform = "scale(1.05)")
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.transform = "scale(1)")
+        }
       >
         <img
           src={book.image}
