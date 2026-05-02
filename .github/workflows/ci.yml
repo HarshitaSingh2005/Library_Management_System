@@ -14,25 +14,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Backend
-      - name: Setup Node (backend)
+      # Use ONE Node version (20) for everything
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
+      # Backend
       - name: Install backend deps
-        run: |
-          cd backend
-          npm install
+        working-directory: ./backend
+        run: npm install
 
       # Frontend
-      - name: Setup Node (frontend)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
       - name: Install frontend deps & build
+        working-directory: ./frontend
         run: |
-          cd frontend
           npm install
           npm run build
