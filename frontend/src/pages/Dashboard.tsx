@@ -2,19 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBook, FaUsers } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import Layout from "../components/Layout";
 import WelcomeBanner from "../components/WelcomeBanner";
 import StatsCard from "../components/StatsCard";
 import BookCard from "../components/BookCard";
 import BookDetails from "../components/BookDetails";
-
 import API from "../services/api";
 
+type Book = {
+  id: number;
+  title: string;
+  author: string;
+  category: string;
+  image: string;
+  available: number;
+};
+
 const Dashboard = () => {
-  const [books, setBooks] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [selectedBook, setSelectedBook] = useState(null);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [filtered, setFiltered] = useState<Book[]>([]);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const navigate = useNavigate();
 
@@ -29,7 +36,6 @@ const Dashboard = () => {
     fetchBooks();
   }, [navigate]);
 
-  // Fetch books
   const fetchBooks = async () => {
     try {
       const res = await API.get("/books");
@@ -40,16 +46,14 @@ const Dashboard = () => {
     }
   };
 
-  // Search books
-  const handleSearch = (text) => {
+  const handleSearch = (text: string) => {
     const result = books.filter((book) =>
       book.title.toLowerCase().includes(text.toLowerCase())
     );
     setFiltered(result);
   };
 
-  // Issue book
-  const handleIssue = async (bookId) => {
+  const handleIssue = async (bookId: number) => {
     try {
       await API.post("/issues/issue", {
         user_id: 1,
@@ -66,81 +70,65 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="d-flex">
-      {/* Sidebar */}
-      <Sidebar />
-
-      {/* Main Content */}
-      <div
-        className="flex-grow-1 p-4"
-        style={{ marginLeft: "260px", width: "100%" }}
-      >
-        {/* Navbar */}
-        <Navbar onSearch={handleSearch} />
-
-        {/* Welcome Banner */}
-        <WelcomeBanner />
-
-        {/* Stats Cards */}
-        <div className="row g-3 my-3">
-          <div className="col-md-3">
-            <StatsCard
-              title="Total Books"
-              value={books.length}
-              color="#F59E0B"
-              icon={<FaBook />}
-            />
-          </div>
-
-          <div className="col-md-3">
-            <StatsCard
-              title="Issued"
-              value="87"
-              color="#4B2E83"
-              icon={<FaBook />}
-            />
-          </div>
-
-          <div className="col-md-3">
-            <StatsCard
-              title="Members"
-              value="342"
-              color="#EC4899"
-              icon={<FaUsers />}
-            />
-          </div>
-
-          <div className="col-md-3">
-            <StatsCard
-              title="Available"
-              value={books.length - 87}
-              color="#A78BFA"
-              icon={<FaBook />}
-            />
-          </div>
-        </div>
-
-        {/* Books Section */}
-        <div className="container-fluid mt-4">
-          <div className="row">
-            {filtered.map((book) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                onClick={() => setSelectedBook(book)}
-              />
-            ))}
-          </div>
-        </div>
+    <Layout>
+      {/* Navbar Search */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search books..."
+          onChange={(e) => handleSearch(e.target.value)}
+        />
       </div>
 
-      {/* Book Details Modal */}
+      <WelcomeBanner />
+
+      {/* Stats */}
+      <div className="row g-3 my-3">
+        <StatsCard
+          title="Total Books"
+          value={books.length}
+          color="#F59E0B"
+          icon={<FaBook />}
+        />
+        <StatsCard
+          title="Issued"
+          value="87"
+          color="#4B2E83"
+          icon={<FaBook />}
+        />
+        <StatsCard
+          title="Members"
+          value="342"
+          color="#EC4899"
+          icon={<FaUsers />}
+        />
+        <StatsCard
+          title="Available"
+          value={books.length - 87}
+          color="#A78BFA"
+          icon={<FaBook />}
+        />
+      </div>
+
+      {/* Books */}
+      <div className="row">
+        {filtered.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            onClick={() => setSelectedBook(book)}
+          />
+        ))}
+      </div>
+
+      {/* Book Details */}
       <BookDetails
         book={selectedBook}
         onClose={() => setSelectedBook(null)}
         onIssue={handleIssue}
       />
-    </div>
+    </Layout>
   );
 };
 

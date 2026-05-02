@@ -1,6 +1,21 @@
 import React from "react";
 
-const BookDetails = ({ book, onClose, onIssue }) => {
+type Book = {
+  id: number;
+  title: string;
+  author: string;
+  category: string;
+  image: string;
+  available: number;
+};
+
+type Props = {
+  book: Book | null;
+  onClose: () => void;
+  onIssue: (id: number) => void;
+};
+
+const BookDetails: React.FC<Props> = ({ book, onClose, onIssue }) => {
   if (!book) return null;
 
   return (
@@ -25,11 +40,7 @@ const BookDetails = ({ book, onClose, onIssue }) => {
 
       <p>
         <b>Status:</b>{" "}
-        <span
-          className={
-            book.available > 0 ? "text-success" : "text-danger"
-          }
-        >
+        <span className={book.available > 0 ? "text-success" : "text-danger"}>
           {book.available > 0 ? "Available" : "Out of Stock"}
         </span>
       </p>
